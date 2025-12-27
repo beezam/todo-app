@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Theme handling: apply saved preference or system preference, and persist toggles
+  const THEME_KEY = 'theme';
+  const applyTheme = () => {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'dark') document.documentElement.classList.add('dark-theme');
+    else if (saved === 'light') document.documentElement.classList.remove('dark-theme');
+    else {
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) document.documentElement.classList.add('dark-theme');
+      else document.documentElement.classList.remove('dark-theme');
+    }
+  };
+  applyTheme();
+  const themeBtn = document.getElementById('theme-toggle');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark-theme');
+      localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
+    });
+  }
+
   const form = document.getElementById('todo-form');
   const input = document.getElementById('todo-input');
   const list = document.getElementById('todo-list');
